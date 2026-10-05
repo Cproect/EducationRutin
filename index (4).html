@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Планировщик посещаемости 11-გ</title>
+<script>try{var t=JSON.parse(localStorage.getItem('sp2627')||'{}').th||'dark';if(t!='auto')document.documentElement.dataset.theme=t}catch(e){document.documentElement.dataset.theme='dark'}</script>
+<style>
+:root{--bg:#eef1f8;--c:#fff;--t:#1a2338;--m:#69738a;--b:#e1e6f0;--g:#14a56f;--r:#e5484d;--o:#f0a02f;--bl:#4361ee;--off:#e8ebf3;--sh:0 6px 20px rgba(40,55,110,.08);--ohb:#f8d0d0;--ohc:#7a1f1f;--ogb:#d3d7e2;--ogc:#444;--oyb:#fbe8a6;--oyc:#6a5200}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0a0e16;--c:#141a26;--t:#e8ecf5;--m:#9aa5bb;--b:#252d40;--off:#1e2535;--sh:0 8px 28px rgba(0,0,0,.45);--ohb:#4a2327;--ohc:#f3b4b8;--ogb:#2a3040;--ogc:#aab3c5;--oyb:#4a4020;--oyc:#f1de8a}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0a0e16;--c:#141a26;--t:#e8ecf5;--m:#9aa5bb;--b:#252d40;--off:#1e2535;--sh:0 8px 28px rgba(0,0,0,.45);--ohb:#4a2327;--ohc:#f3b4b8;--ogb:#2a3040;--ogc:#aab3c5;--oyb:#4a4020;--oyc:#f1de8a}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--t);padding:12px 12px 96px;max-width:760px;margin:auto}
+h1{font:700 21px/1.25 Georgia,serif;margin:2px 0 14px;padding:18px;border-radius:18px;color:#fff;background:linear-gradient(120deg,#3a4ed8,#12a37f);box-shadow:var(--sh)}h3{margin:0 0 8px;font-size:17px}
+.m{color:var(--m)}.sm{font-size:13px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:16px;padding:14px;margin-bottom:12px;box-shadow:var(--sh)}
+.hero{border:0;color:#fff;cursor:pointer;background:linear-gradient(135deg,#14a56f,#0f8a8a)}.hero.o{background:linear-gradient(135deg,#f0a02f,#e8742a)}.hero.r{background:linear-gradient(135deg,#e5484d,#c1306f)}
+.hero b{font-size:22px}.hero .m{color:rgba(255,255,255,.9);margin-top:4px}
+.rem{border-radius:14px;padding:11px 14px;margin-bottom:10px;cursor:pointer;border:1px solid var(--o);background:rgba(240,160,47,.16)}.rem.l3{border-color:var(--r);background:rgba(229,72,77,.15)}.rem b{font-size:16px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row b{flex:1}
+.tag{padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;background:var(--g)}.tag.o{background:var(--o)}.tag.r{background:var(--r)}
+.bar{height:9px;background:var(--off);border-radius:9px;margin:8px 0;overflow:hidden}.bar i{display:block;height:100%;border-radius:9px;background:var(--g)}.bar i.o{background:var(--o)}.bar i.r{background:var(--r)}
+.w{padding:9px 12px;border-radius:12px;margin-bottom:8px;font-size:14px;background:rgba(240,160,47,.17)}.w.r{background:rgba(229,72,77,.17)}
+.wk{display:flex;gap:6px;align-items:center;margin:8px 0;flex-wrap:wrap}.wk>.m{width:44px;font-size:12px}.wk>.m:last-child{width:auto;margin-left:auto}
+.ch{padding:8px 8px;border-radius:11px;font-size:12px;cursor:pointer;min-width:54px;text-align:center;border:1px solid var(--b)}
+.abs{background:var(--r)!important;color:#fff;border-color:var(--r)}
+.part{background:repeating-linear-gradient(45deg,var(--o),var(--o) 5px,#f6c276 5px,#f6c276 10px)!important;color:#111}
+.pres,.pres0{background:rgba(20,165,111,.18)}.pin{background:rgba(20,165,111,.36);border-color:var(--g)}
+.skip{background:rgba(240,160,47,.25);border:1px dashed var(--o)!important}.alt{background:transparent;border:1px dotted var(--o)!important}.go{background:var(--c)}
+.off,.oh,.og,.oy,.ow{cursor:default}.ch.off{background:var(--off);color:var(--m)}
+.oh{background:var(--ohb);color:var(--ohc)}.og{background:var(--ogb);color:var(--ogc)}.oy{background:var(--oyb);color:var(--oyc)}.ow{background:transparent;color:var(--m)}
+.mo{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.cd{position:relative;aspect-ratio:1.1;display:flex;align-items:center;justify-content:center;border-radius:10px;font-size:13px;border:1px solid transparent;cursor:pointer}
+.cd.e{visibility:hidden}.cd.td,.ch.td{box-shadow:0 0 0 2px var(--bl)}.hd{font-size:11px;text-align:center;color:var(--m)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-left:5px;vertical-align:middle}.cd .dot{position:absolute;right:4px;top:4px;margin:0}
+.dot.l1{background:#aab3c5}.dot.l2{background:var(--o)}.dot.l3{background:var(--r)}
+.imp{border-radius:12px;padding:9px 12px;margin:10px 0;background:var(--off)}.imp.l2{background:rgba(240,160,47,.2)}.imp.l3{background:rgba(229,72,77,.18)}
+.lg{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin:8px 0}.lg span{padding:4px 9px;border-radius:9px;border:1px solid var(--b)}
+nav{position:fixed;left:12px;right:12px;max-width:736px;margin:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));display:flex;background:var(--c);border:1px solid var(--b);border-radius:18px;box-shadow:var(--sh);overflow:hidden}
+nav button{flex:1;border:0;background:none;color:var(--m);padding:14px 4px;font:600 14px system-ui}nav button.on{color:var(--bl);background:rgba(67,97,238,.1)}
+.v{display:none}.v.on{display:block}
+button,input{font:inherit}.bt button,#md button{padding:10px 14px;border-radius:11px;border:1px solid var(--b);background:var(--c);color:var(--t);margin:3px 3px 3px 0;cursor:pointer}
+input[type=number]{width:70px;padding:6px;border-radius:9px;border:1px solid var(--b);background:var(--bg);color:var(--t)}
+#md{position:fixed;inset:0;background:rgba(10,15,30,.55);display:none;align-items:center;justify-content:center;padding:14px;z-index:9}#md.on{display:flex}
+#md .box{background:var(--c);border-radius:18px;padding:18px;max-width:420px;width:100%;max-height:90vh;overflow:auto}#md label{display:block;padding:4px 0}
+#ts{position:fixed;left:12px;right:12px;bottom:84px;background:#222;color:#fff;padding:12px;border-radius:12px;display:none;z-index:10}
+body,.card,.ch,.cd,nav,#md .box,.rem,.imp{transition:background-color .35s,color .35s,border-color .35s}
+@keyframes up{from{opacity:0;transform:translateY(14px)}}
+@keyframes pop{0%{transform:scale(.55)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+@keyframes grow{from{transform:scaleX(0)}}
+@keyframes fade{from{opacity:0}}
+@keyframes sheet{from{opacity:0;transform:translateY(26px) scale(.96)}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(240,160,47,.55)}50%{box-shadow:0 0 0 12px rgba(240,160,47,0)}}
+.v.on{animation:up .4s cubic-bezier(.2,.8,.2,1)}
+.bar i{transform-origin:left;animation:grow .9s cubic-bezier(.2,.8,.2,1)}
+#md.on{animation:fade .2s}#md.on .box{animation:sheet .3s cubic-bezier(.2,.8,.2,1)}
+.pop{animation:pop .45s cubic-bezier(.2,.8,.2,1)}
+.hero.o{animation:glow 2.8s ease-in-out 3}#ts{animation:up .25s}
+.ch,.cd,.hero,.bt button,#md button,.fb{transition:transform .12s,background-color .25s}
+.ch:active,.cd:active,.bt button:active,#md button:active,.fb:active{transform:scale(.93)}.hero:active{transform:scale(.985)}
+h1{position:relative;padding-right:104px}
+.hb{position:absolute;top:12px;right:12px;display:flex;gap:6px}.hb button{width:38px;height:38px;border-radius:12px;border:0;background:rgba(255,255,255,.2);color:#fff;font-size:18px;cursor:pointer;transition:transform .12s,background .2s}.hb button:active{transform:scale(.88)}
+.fb{display:inline-block;padding:10px 14px;border-radius:11px;border:1px solid var(--b);background:var(--c);cursor:pointer;margin:3px 3px 3px 0}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<h1>Планировщик посещаемости · 11-გ · 2026/27<span class="hb"><button onclick="undo()" title="Отменить последнее действие">↶</button><button id="thb" onclick="cycleTh()" title="Тема"></button></span></h1>
+<div id="v0" class="v on"></div><div id="v1" class="v"></div><div id="v2" class="v"></div><div id="v3" class="v"></div>
+<nav><button onclick="tab(0)">План</button><button onclick="tab(1)">Календарь</button><button onclick="tab(2)">Предметы</button><button onclick="tab(3)">Настройки</button></nav>
+<div id="md" onclick="if(event.target===this)cl()"></div><div id="ts"></div>
+<script>
+const SUBJ=[['ka','ქართული','Грузинский',3],['ma','მათემატიკა','Математика',3],['en','ინგლისური','Английский',5],['ru','რუსული','Русский',2],['ge','გეოგრაფია','География',2],['sp','სპორტი','Спорт',1],['sa','საქ. ისტორია','История Грузии',3],['wh','მსოფ. ისტორია','Всемирная история',2],['ar','პრქ. ხელოვნება','Искусство (проект)',1],['ph','ფიზიკა','Физика',3],['ch','ქიმია','Химия',3],['ct','ქიმ. ტექნოლოგია','Хим. технология',2],['pc','პრქ. მოქალაქეობა','Гражданство (проект)',2],['ci','მოქალაქეობა','Гражданство',2],['bi','ბიოლოგია','Биология',3]];
+const TT={1:['ci','ma','sp','ge','wh','ka','ru'],2:['ka','ct','ge','en','ma','pc','bi'],3:['ph','ch','ma','ka','wh','ci','ru'],4:['sa','ka','en','bi','ma','ar'],5:['ph','ch','ct','sp','ka','ma','sa']};
+const HOL={'2026-10-14':'Мцхетоба','2026-11-23':'Гиоргоба','2027-01-01':'Новый год','2027-01-02':'Новый год','2027-01-07':'Рождество','2027-01-19':'Крещение','2027-03-03':'День матери','2027-03-08':'8 марта','2027-04-09':'День нац. единства','2027-05-12':'День Андрия','2027-05-17':'День семьи','2027-05-26':'День независимости'};
+const VAC=[['2026-12-30','2027-01-14','Зимние каникулы','g'],['2027-03-08','2027-03-14','Весенние каникулы','y'],['2027-04-30','2027-05-03','Пасхальные каникулы','y']];
+const START='2026-09-15',END='2027-06-15',DN=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const MN=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const nm={},rn={};SUBJ.forEach(s=>{nm[s[0]]=s[1];rn[s[0]]=s[2]});
+const pad=n=>String(n).padStart(2,'0'),$=s=>document.querySelector(s),fmt=d=>d.slice(8)+'.'+d.slice(5,7);
+const loc=t=>t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+const add=(d,n)=>{const t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)};
+const dowOf=d=>new Date(d+'T00:00:00Z').getUTCDay(),TODAY=loc(new Date());
+function off(d,w){if(d<START||d>END)return['Вне учебного года (старт 15.09, конец 15.06)','g'];if(w==0||w==6)return['Выходной','w'];if(HOL[d])return[HOL[d]+' (праздник)','h'];for(const v of VAC)if(d>=v[0]&&d<=v[1])return[v[2],v[3]];return null}
+const AD={},days=[];
+for(let d='2026-09-01';d<='2027-06-30';d=add(d,1)){const w=dowOf(d),o=off(d,w),x={d,dow:w,o,l:o?[]:TT[w],w:add(d,-((w+6)%7))};AD[d]=x;if(!o)days.push(x)}
+let st={v:2,R:2,minGo:2,lim:30,imp:{},att:{},dv:{}};
+try{Object.assign(st,JSON.parse(localStorage.getItem('sp2627')||'{}'))}catch(e){}
+if(st.v!==2){st.v=2;st.R=2;st.minGo=2}
+const DEF=()=>({v:2,R:2,minGo:2,lim:30,imp:{},att:{},dv:{},th:'dark'});
+if(!st.th)st.th='dark';
+const BK='sp2627_bk';let LAST=JSON.stringify(st),hist=[],memOK=true,SAVEDAT=0,FX=null;
+try{localStorage.setItem('sp2627_p','1');SAVEDAT=+localStorage.getItem('sp2627_t')||0}catch(e){memOK=false}
+try{navigator.storage.persist()}catch(e){}
+// автокопии: до 8 штук, не чаще раза в 30 минут (или принудительно перед заменой данных)
+function snap(f){try{const b=JSON.parse(localStorage.getItem(BK)||'[]');if(f||!b.length||Date.now()-b[b.length-1].t>18e5){b.push({t:Date.now(),d:LAST});while(b.length>8)b.shift();localStorage.setItem(BK,JSON.stringify(b))}}catch(e){}}
+function persist(){try{localStorage.setItem('sp2627',LAST);localStorage.setItem('sp2627_t',SAVEDAT=Date.now());snap();memOK=true}catch(e){memOK=false}}
+function save(){const j=JSON.stringify(st);if(j===LAST)return;hist.push(LAST);if(hist.length>40)hist.shift();LAST=j;persist()}
+let N,L,used,val,PW,PL,planCnt;
+const sc=x=>x.l.reduce((a,i)=>a+val[i],0);
+let MEAN=1;const LN=['','Обычный','Важный','Очень важный'];
+// важность дня 1-3: по ценности уроков относительно среднего; 3 — если у предмета дня почти исчерпан лимит; можно задать вручную
+const lvl=x=>{const o=st.dv[x.d];if(o)return o;const r=sc(x)/MEAN;let l=r<.9?1:r>1.1?3:2;if(x.d>=TODAY&&x.l.some(i=>L[i]-used[i]<=2))l=3;return l};
+const dscore=x=>sc(x)*[0,.6,1,1.5][lvl(x)];
+const why=x=>{const t=x.l.filter(i=>L[i]-used[i]<=2).map(i=>nm[i]);return(t.length?'Близок лимит: '+t.join(', ')+'. ':'')+'Ценные уроки: '+[...x.l].sort((a,b)=>val[b]-val[a]).slice(0,2).map(i=>nm[i]).join(', ')}
+const missed=x=>{const a=st.att[x.d];return a==='a'?x.l:Array.isArray(a)?x.l.filter((_,i)=>a.includes(i)):[]};
+function calc(){
+ N={};L={};used={};val={};PW={};planCnt={};SUBJ.forEach(s=>{N[s[0]]=0;used[s[0]]=0;planCnt[s[0]]=0});
+ for(let k=1;k<=5;k++)TT[k].forEach(i=>PW[i]=(PW[i]||0)+1);
+ days.forEach(x=>x.l.forEach(i=>N[i]++));
+ // ценность урока = важность × редкость (реже урок → ценнее)
+ SUBJ.forEach(s=>{const i=s[0];L[i]=Math.floor(N[i]*st.lim/100+1e-9);val[i]=(st.imp[i]??s[3])*5/PW[i]});
+ days.forEach(x=>missed(x).forEach(i=>used[i]++));MEAN=days.reduce((a,x)=>a+sc(x),0)/days.length;
+ // бюджет пропусков на предмет = лимит − уже пропущено − золотой запас
+ const B={};SUBJ.forEach(s=>B[s[0]]=L[s[0]]-used[s[0]]-st.R);
+ const wk={};days.forEach(x=>{const o=wk[x.w]=wk[x.w]||{all:[],c:[],sk:0};o.all.push(x);if(st.att[x.d]==='a')o.sk++;if(x.d>=TODAY&&st.att[x.d]===undefined)o.c.push(x)});
+ const P=new Set();let prog=true,r=0;
+ while(prog&&r<5){prog=false;
+  const ord=Object.keys(wk).filter(w=>wk[w].c.length).sort().map((w,i)=>[w,(i*.618034+r*.37)%1]).sort((a,b)=>a[1]-b[1]);
+  for(const[w]of ord){const o=wk[w];if(o.sk>=Math.max(0,o.all.length-st.minGo))continue;let b=null;
+   for(const x of o.c){if(P.has(x.d)||x.l.some(i=>B[i]<1))continue;if(!b||dscore(x)<dscore(b))b=x}
+   if(b){P.add(b.d);b.l.forEach(i=>{B[i]--;planCnt[i]++});o.sk++;prog=true}}
+  r++}
+ // золотой запас: сколько ещё полных дней можно пропустить сверх плана (при реальных лимитах)
+ const C={};SUBJ.forEach(s=>C[s[0]]=L[s[0]]-used[s[0]]-planCnt[s[0]]);
+ // запасные дни: почти так же дёшевы, как выбранный — план не жёсткий
+ const alt=new Set();Object.values(wk).forEach(o=>{const ps=o.c.filter(x=>P.has(x.d));if(!ps.length)return;const m=Math.max(...ps.map(dscore));o.c.forEach(x=>{if(!P.has(x.d)&&dscore(x)<=m*1.3&&x.l.every(i=>C[i]>=1))alt.add(x.d)})});
+ let extra=0;
+ days.filter(x=>x.d>=TODAY&&st.att[x.d]===undefined&&!P.has(x.d)).sort((a,b)=>dscore(a)-dscore(b)).forEach(x=>{if(x.l.every(i=>C[i]>=1)){x.l.forEach(i=>C[i]--);extra++}});
+ PL={P,extra,alt};
+}
+function cls(x){const a=st.att[x.d];if(a==='a')return'abs';if(Array.isArray(a))return'part';if(a==='p')return x.d<=TODAY?'pres':'pin';if(x.d<TODAY)return'pres0';return PL.P.has(x.d)?'skip':PL.alt.has(x.d)?'alt':'go'}
+function v0(){
+ const past=days.filter(x=>x.d<TODAY).length,t=AD[TODAY];let h;
+ if(t&&!t.o){const a=st.att[TODAY];let s,c='g';
+  if(a==='a'){s='Сегодня: не был(а)';c='r'}else if(Array.isArray(a)){s='Сегодня: пропущены отдельные уроки';c='o'}else if(a==='p')s='Сегодня: иду (зафиксировано)';else if(PL.P.has(TODAY)){s='Сегодня можно пропустить';c='o'}else s='Сегодня лучше идти';
+  h=`<div class="card hero ${c}" onclick="openDay('${TODAY}')"><b>${s}</b><div class="m sm">${DN[t.dow]} ${fmt(TODAY)} · ${LN[lvl(t)].toLowerCase()} день · ${t.l.map(i=>nm[i]).join(', ')}</div></div>`}
+ else h=`<div class="card hero"><b>Сегодня уроков нет</b><div class="m sm">${t&&t.o?t.o[0]:'вне календаря'}</div></div>`;
+ const W=[];SUBJ.forEach(s=>{const i=s[0],rem=L[i]-used[i];
+  if(rem<0)W.push(`<div class="w r">ЭКСТЕРН: ${s[1]} — пропущено ${used[i]} из ${L[i]} допустимых (превышение ${-rem})</div>`);
+  else if(rem==0)W.push(`<div class="w r">${s[1]}: лимит исчерпан — этот предмет пропускать нельзя</div>`);
+  else if(rem<=2)W.push(`<div class="w">${s[1]}: осталось ${rem} пропуск${rem==1?'':'а'} до экстерна</div>`)});
+ const pc=[0,0,0,0,0,0,0];PL.P.forEach(d=>pc[AD[d].dow]++);
+ const pat=[1,2,3,4,5].map(i=>`${DN[i]} ×${pc[i]}`).join(' · ');
+ const full=days.filter(x=>st.att[x.d]==='a').length;
+ const tm=add(TODAY,-((dowOf(TODAY)+6)%7)),mons=[...new Set(days.filter(x=>x.w>=tm).map(x=>x.w))];
+ const wl=mons.map(w=>{let k=0,g=0;const ch=[1,2,3,4,5].map(i=>{const d=add(w,i-1),x=AD[d];
+  if(!x||x.o)return`<span class="ch off" title="${x&&x.o?x.o[0]:''}">${DN[i]}</span>`;k++;const c=cls(x);if(c!='abs'&&c!='skip')g++;
+  return`<span class="ch ${c}${d==TODAY?' td':''}${d==FX?' pop':''}" onclick="openDay('${d}')">${DN[i]} ${d.slice(8)}<i class="dot l${lvl(x)}"></i></span>`}).join('');
+  return`<div class="wk"><span class="m">${fmt(w)}</span>${ch}<span class="m">${g}/${k}</span></div>`}).join('');
+ const R2=[];[t&&!t.o?t:null,days.find(x=>x.d>TODAY)].forEach(x=>{if(x&&lvl(x)>=2&&st.att[x.d]!=='a'){const dd=Math.round((new Date(x.d)-new Date(TODAY))/864e5);R2.push(`<div class="rem l${lvl(x)}" onclick="openDay('${x.d}')"><b>${dd==0?'Сегодня':dd==1?'Завтра':DN[x.dow]+' '+fmt(x.d)}: ${LN[lvl(x)].toLowerCase()} день</b><div class="sm">${why(x)}</div></div>`)}});
+ const bkw=Object.keys(st.att).length&&(!st.lx||Date.now()-st.lx>12096e5)?`<div class="rem" onclick="dl()"><b>Сохраните копию данных</b><div class="sm">Файл ${st.lx?'не скачивали больше 14 дней':'ещё ни разу не скачивали'}. Нажмите, чтобы скачать.</div></div>`:'';
+ return R2.join('')+bkw+h+W.join('')+`<div class="card"><div class="row"><b>Золотой запас: ещё ${PL.extra} ${PL.extra%10==1&&PL.extra!=11?'день':'дн.'}</b></div><div class="m sm">Столько полных дней можно пропустить сверх плана без экстерна. План сам держит в запасе ${st.R} пропуска по каждому предмету.</div></div>
+ <div class="card"><div class="m sm">Учебных дней: ${days.length}${days.length!=169?' (в календаре должно быть 169!)':''} · прошло ${past} · осталось ${days.length-past}<br>Полных пропусков отмечено: ${full} · запланировано: ${PL.P.size}<br>Ритм пропусков по плану: ${pat}</div></div>
+ <div class="card"><h3>План по неделям</h3><div class="lg"><span class="pres">был / иду</span><span class="skip">план: пропуск</span><span class="abs">не был</span><span class="part">часть уроков</span><span class="go">иду по плану</span><span class="alt">запасной день для пропуска</span><span><i class="dot l1"></i>обычный<i class="dot l2"></i>важный<i class="dot l3"></i>очень важный</span></div><div class="m sm">Нажмите на день, чтобы отметить посещение — план перестроится сам. Число справа: дней в школе / учебных дней.</div>${wl}</div>`}
+function v1(){let o=`<div class="lg"><span class="oh">праздник</span><span class="oy">весенние/пасхальные</span><span class="og">зимние/летние/до 15.09</span><span class="pres">был</span><span class="skip">план: пропуск</span><span class="abs">не был</span></div><div class="m sm" style="margin-bottom:8px">Цветные дни без уроков не учитываются в расчёте. Нажмите на учебный день, чтобы изменить отметку (в том числе в прошлом).</div>`;
+ for(let m=8;m<18;m++){const y=2026+(m>11?1:0),mm=m%12,f=(new Date(Date.UTC(y,mm,1)).getUTCDay()+6)%7,n=new Date(Date.UTC(y,mm+1,0)).getUTCDate();let c=0,g='';
+  for(let i=0;i<f;i++)g+='<div class="cd e"></div>';
+  for(let i=1;i<=n;i++){const d=`${y}-${pad(mm+1)}-${pad(i)}`,x=AD[d],td=d==TODAY?' td':'';
+   if(x.o)g+=`<div class="cd o${x.o[1]}${td}" onclick="warn('${d}')" title="${x.o[0]}">${i}</div>`;else{c++;g+=`<div class="cd ${cls(x)}${td}${d==FX?' pop':''}" onclick="openDay('${d}')">${i}<i class="dot l${lvl(x)}"></i></div>`}}
+  o+=`<div class="card"><div class="row"><b>${MN[mm]} ${y}</b><span class="m sm">учебных дней: ${c}</span></div><div class="mo">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(a=>`<div class="hd">${a}</div>`).join('')}${g}</div></div>`}
+ return o}
+function v2(){return SUBJ.map(s=>{const i=s[0],u=used[i],l=L[i],pl=planCnt[i],rem=l-u,p=l?Math.min(100,u/l*100):100,c=rem<0?'r':rem<=2?'o':'g';
+ return`<div class="card"><div class="row"><b>${s[1]}</b><span class="m sm">${s[2]}</span><span class="tag ${c}">${rem<0?'ЭКСТЕРН':'ост. '+rem}</span></div><div class="bar"><i class="${c}" style="width:${p}%"></i></div><div class="m sm">Пропущено ${u} из ${l} допустимых · всего уроков за год ${N[i]} (${PW[i]}/нед) · по плану +${pl} → ${u+pl}<br>Ценность урока: ${val[i].toFixed(1)}</div><label class="sm">Важность (0–10): <input type="number" min="0" max="10" step=".5" value="${st.imp[i]??s[3]}" onchange="imp('${i}',this.value)"></label></div>`}).join('')}
+function v3(){return`<div class="card"><h3>Строгость плана</h3><div class="bt"><button onclick="pre(3,3)">Строго</button><button onclick="pre(2,2)">Мягко</button><button onclick="pre(1,1)">Свободно</button><button onclick="askN()">Напоминания</button></div><div class="m sm">Сейчас: запас ${st.R} пропуска на предмет, минимум ${st.minGo} дн. в школе в неделю. Строго — 3/3, мягко — 2/2, свободно — 1/1. Напоминания о важных днях показываются при открытии страницы.</div><h3 style="margin-top:14px">Параметры</h3>
+<p><label>Лимит пропусков, % от всех уроков предмета: <input type="number" min="1" max="100" value="${st.lim}" onchange="cfg('lim',this.value)"></label></p>
+<p><label>Золотой запас, пропусков на предмет: <input type="number" min="0" max="15" value="${st.R}" onchange="cfg('R',this.value)"></label></p>
+<p><label>Минимум дней в школе за неделю: <input type="number" min="0" max="5" value="${st.minGo}" onchange="cfg('minGo',this.value)"></label></p></div>
+${extraCards()}
+<div class="card sm m"><b>Как считает модель.</b> Каждый урок имеет ценность = важность × редкость (5 ÷ уроков в неделю). Ценность дня — сумма ценностей его уроков: дни с редкими уроками дороже, дни с ежедневными дешевле. Лимит предмета = ${st.lim}% от всех его уроков за год. План выбирает дни пропуска с минимальной ценностью, равномерно по неделям, не трогая золотой запас, и пересобирается после каждой отметки.</div>`}
+function render(){calc();$('#v0').innerHTML=v0();$('#v1').innerHTML=v1();$('#v2').innerHTML=v2();$('#v3').innerHTML=v3();FX=null;thIcon()}
+function tab(n){document.querySelectorAll('.v').forEach((e,i)=>e.classList.toggle('on',i==n));document.querySelectorAll('nav button').forEach((e,i)=>e.classList.toggle('on',i==n));scrollTo(0,0)}
+function warn(d){const x=AD[d],t=$('#ts');t.textContent=`${fmt(d)}: уроков нет — ${x.o[0]}. День не учитывается в расчёте.`;t.style.display='block';clearTimeout(warn.t);warn.t=setTimeout(()=>t.style.display='none',3800)}
+function openDay(d){const x=AD[d],a=st.att[d],f=d>TODAY;
+ $('#md').innerHTML=`<div class="box"><h3>${DN[x.dow]} ${fmt(d)}</h3><div class="m sm">${f?'Будущий день: можно зафиксировать вручную, план подстроится.':'Отметьте, как было.'}</div><p><button onclick="sa('${d}','p')">${f?'Пойду':'Был(а)'}</button><button onclick="sa('${d}','a')">${f?'Пропущу':'Не был(а)'}</button><button onclick="sa('${d}')">Авто</button></p><div class="imp l${lvl(x)}"><b>${LN[lvl(x)]} день${st.dv[d]?' (вручную)':''}</b><div class="sm">${why(x)}</div></div><div class="sm m">Задать важность дня:</div><p>${[['Авто',0],['Обычный',1],['Важный',2],['Очень важный',3]].map(a=>`<button onclick="sv('${d}',${a[1]})">${a[0]}</button>`).join('')}</p><div class="sm m">Или отметьте пропущенные уроки:</div>${x.l.map((i,k)=>`<label><input type="checkbox" value="${k}" ${Array.isArray(a)&&a.includes(k)?'checked':''}> ${k+1}. ${nm[i]}</label>`).join('')}<p><button onclick="sl('${d}')">Применить по урокам</button><button onclick="cl()">Закрыть</button></p></div>`;$('#md').classList.add('on')}
+const cl=()=>$('#md').classList.remove('on');
+function sa(d,v){if(v===undefined)delete st.att[d];else st.att[d]=v;FX=d;save();cl();render()}
+function sl(d){const k=[...document.querySelectorAll('#md input:checked')].map(e=>+e.value);if(!k.length)delete st.att[d];else st.att[d]=k.length==AD[d].l.length?'a':k;FX=d;save();cl();render()}
+const imp=(i,v)=>{st.imp[i]=+v;save();render()},cfg=(k,v)=>{st[k]=Math.max(0,+v||0);save();render()};
+function exp(){const s=JSON.stringify(st);(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(()=>alert('Скопировано'),()=>prompt('Скопируйте:',s))}
+function imp2(){const s=prompt('Вставьте данные:');if(!s)return;try{const j=JSON.parse(s),th=st.th;snap(1);st=Object.assign(DEF(),j.data||j);st.th=th;save();render()}catch(e){alert('Не удалось прочитать данные')}}
+const sv=(d,v)=>{if(v)st.dv[d]=v;else delete st.dv[d];save();render();openDay(d)};
+const pre=(r,m)=>{st.R=r;st.minGo=m;save();render()};
+function notif(){try{if(Notification.permission!=='granted')return;const x=days.find(y=>y.d>TODAY);if(x&&lvl(x)>=2&&st.nt!==TODAY){st.nt=TODAY;save();new Notification('Ближайший учебный день важный',{body:DN[x.dow]+' '+fmt(x.d)+': '+why(x)})}}catch(e){}}
+function askN(){try{Notification.requestPermission().then(notif)}catch(e){alert('Браузер не поддерживает уведомления')}}
+const dk=()=>{const t=document.documentElement.dataset.theme;return t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches)};
+const thIcon=()=>{$('#thb').textContent=dk()?'☀':'☾'};
+function applyTh(){document.documentElement.dataset.theme=st.th==='auto'?'':st.th;thIcon()}
+const setTh=v=>{st.th=v;save();applyTh();render()},cycleTh=()=>setTh(dk()?'light':'dark');
+function toast(m){const t=$('#ts');t.textContent=m;t.style.display='block';clearTimeout(warn.t);warn.t=setTimeout(()=>t.style.display='none',3200)}
+function undo(){if(!hist.length)return toast('Нечего отменять');const th=st.th;st=JSON.parse(hist.pop());st.th=th;LAST=JSON.stringify(st);persist();applyTh();render();toast('Последнее действие отменено')}
+function dl(){const b=new Blob([JSON.stringify({app:'sp2627',saved:new Date().toISOString(),data:st},null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='attendance-11g-'+TODAY+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1e3);st.lx=Date.now();save();render();toast('Файл скачан')}
+function up(f){if(!f)return;const r=new FileReader();r.onload=()=>{try{const j=JSON.parse(r.result),o=j.data||j;if(!o||typeof o.att!=='object')throw 0;if(!confirm('Заменить текущие данные данными из файла? Текущие сохранятся в автокопиях.'))return;const th=st.th;snap(1);st=Object.assign(DEF(),o);st.th=th;save();render();toast('Данные загружены')}catch(e){alert('Не удалось прочитать файл')}};r.readAsText(f)}
+function rs(i){try{const x=JSON.parse(localStorage.getItem(BK)||'[]')[i];if(!x||!confirm('Восстановить копию от '+new Date(x.t).toLocaleString('ru')+'?'))return;const th=st.th;snap(1);st=Object.assign(DEF(),JSON.parse(x.d));st.th=th;save();render();toast('Копия восстановлена')}catch(e){alert('Не удалось восстановить')}}
+function extraCards(){let b=[];try{b=JSON.parse(localStorage.getItem(BK)||'[]')}catch(e){}
+ const T=t=>new Date(t).toLocaleString('ru',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}),n=Object.keys(st.att).length;
+ return`<div class="card bt"><h3>Тема</h3>${[['auto','Авто'],['dark','Тёмная'],['light','Светлая']].map(a=>`<button ${st.th==a[0]?'style="border-color:var(--bl);color:var(--bl)"':''} onclick="setTh('${a[0]}')">${a[1]}</button>`).join('')}</div>
+<div class="card bt"><h3>Память и копии</h3><div class="sm m">${memOK?'Автосохранение включено: каждое изменение сразу пишется в память браузера.':'⚠ Память браузера недоступна (приватный режим?). Скачивайте файл после правок.'}<br>Отметок: ${n} · сохранено: ${SAVEDAT?T(SAVEDAT):'—'} · файл скачан: ${st.lx?T(st.lx):'ещё не было'}</div>
+<p><button onclick="dl()">⬇ Скачать файл</button><label class="fb">⬆ Загрузить файл<input type="file" accept=".json,application/json" hidden onchange="up(this.files[0]);this.value=''"></label><button onclick="undo()">↶ Отменить</button></p>
+<p><button onclick="exp()">Скопировать текст</button><button onclick="imp2()">Вставить текст</button><button onclick="if(confirm('Стереть все отметки? Автокопии останутся.')){snap(1);st.att={};save();render()}">Сбросить отметки</button></p>
+<div class="sm m">Автокопии (до 8, раз в 30 минут при правках):</div>${b.length?b.map((x,i)=>[x,i]).reverse().map(([x,i])=>`<div class="row sm" style="margin-top:6px"><span>${T(x.t)}</span><span class="m">${Object.keys(JSON.parse(x.d).att||{}).length} отметок</span><button onclick="rs(${i})">Восстановить</button></div>`).join(''):'<div class="sm m">Пока нет.</div>'}</div>`}
+applyTh();
+render();tab(0);notif();
+</script></body></html>
