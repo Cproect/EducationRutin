@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Планировщик посещаемости 11-გ</title>
+<style>
+:root{--bg:#eef1f5;--c:#fff;--t:#17202e;--m:#667086;--b:#dde2ea;--g:#1c9a60;--r:#d63b3b;--o:#e58a0b;--bl:#2c6be0;--off:#e6e8ee}
+@media(prefers-color-scheme:dark){:root{--bg:#11151d;--c:#1a202b;--t:#e7eaf1;--m:#97a1b6;--b:#2a3243;--off:#232a37}}
+*{box-sizing:border-box}html,body{margin:0}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--t);padding:12px 12px 84px;max-width:760px;margin:auto}
+h1{font:700 20px/1.2 Georgia,serif;margin:4px 0 12px}h3{margin:0 0 6px}
+.m{color:var(--m)}.sm{font-size:13px}
+.card{background:var(--c);border:1px solid var(--b);border-radius:12px;padding:12px;margin-bottom:10px}
+.hero{border-left:6px solid var(--g);cursor:pointer}.hero.o{border-left-color:var(--o)}.hero.r{border-left-color:var(--r)}
+.hero b{font-size:19px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.row b{flex:1}
+.tag{padding:2px 9px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;background:var(--g)}.tag.o{background:var(--o)}.tag.r{background:var(--r)}
+.bar{height:8px;background:var(--off);border-radius:9px;margin:8px 0;overflow:hidden}.bar i{display:block;height:100%;background:var(--g)}.bar i.o{background:var(--o)}.bar i.r{background:var(--r)}
+.w{padding:8px 10px;border-radius:8px;margin-bottom:6px;font-size:14px;background:rgba(229,138,11,.15)}.w.r{background:rgba(214,59,59,.17)}
+.wk{display:flex;gap:5px;align-items:center;margin:6px 0;flex-wrap:wrap}.wk>.m{width:44px;font-size:12px}.wk>.m:last-child{width:auto;margin-left:auto}
+.ch{padding:6px 7px;border-radius:8px;font-size:12px;cursor:pointer;min-width:52px;text-align:center;border:1px solid var(--b)}
+.abs{background:var(--r)!important;color:#fff;border-color:var(--r)}
+.part{background:repeating-linear-gradient(45deg,var(--o),var(--o) 5px,#f3b45a 5px,#f3b45a 10px)!important;color:#111}
+.pres,.pres0{background:rgba(28,154,96,.2)}.pin{background:rgba(28,154,96,.35);border-color:var(--g)}
+.skip{background:rgba(229,138,11,.22);border:1px dashed var(--o)!important}.go{background:var(--c)}
+.off,.oh,.og,.oy,.ow{cursor:default;opacity:.85}.ch.off{background:var(--off);color:var(--m)}
+.oh{background:#f6c9c9;color:#7a1f1f}.og{background:#cfd3dc;color:#444}.oy{background:#fbe7a0;color:#6a5200}.ow{background:transparent;color:var(--m)}
+.mo{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:6px}.cd{aspect-ratio:1.1;display:flex;align-items:center;justify-content:center;border-radius:7px;font-size:13px;border:1px solid transparent;cursor:pointer}
+.cd.e{visibility:hidden}.cd.td,.ch.td{box-shadow:0 0 0 2px var(--bl)}.hd{font-size:11px;text-align:center;color:var(--m)}
+.lg{display:flex;flex-wrap:wrap;gap:6px;font-size:12px;margin:6px 0}.lg span{padding:3px 8px;border-radius:7px;border:1px solid var(--b)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--c);border-top:1px solid var(--b);padding-bottom:env(safe-area-inset-bottom,0)}
+nav button{flex:1;border:0;background:none;color:var(--m);padding:14px 4px;font:600 14px system-ui}nav button.on{color:var(--bl);box-shadow:inset 0 3px var(--bl)}
+.v{display:none}.v.on{display:block}
+button,input{font:inherit}.bt button,#md button,.bt a{padding:9px 13px;border-radius:9px;border:1px solid var(--b);background:var(--c);color:var(--t);margin:3px 3px 3px 0;cursor:pointer}
+input[type=number]{width:70px;padding:5px;border-radius:7px;border:1px solid var(--b);background:var(--bg);color:var(--t)}
+#md{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:14px;z-index:9}#md.on{display:flex}
+#md .box{background:var(--c);border-radius:14px;padding:16px;max-width:420px;width:100%;max-height:90vh;overflow:auto}#md label{display:block;padding:4px 0}
+#ts{position:fixed;left:12px;right:12px;bottom:76px;background:#222;color:#fff;padding:12px;border-radius:10px;display:none;z-index:10}
+</style></head><body>
+<h1>Планировщик посещаемости · 11-გ · 2026/27</h1>
+<div id="v0" class="v on"></div><div id="v1" class="v"></div><div id="v2" class="v"></div><div id="v3" class="v"></div>
+<nav><button onclick="tab(0)">План</button><button onclick="tab(1)">Календарь</button><button onclick="tab(2)">Предметы</button><button onclick="tab(3)">Настройки</button></nav>
+<div id="md" onclick="if(event.target===this)cl()"></div><div id="ts"></div>
+<script>
+const SUBJ=[['ka','ქართული','Грузинский',3],['ma','მათემატიკა','Математика',3],['en','ინგლისური','Английский',5],['ru','რუსული','Русский',2],['ge','გეოგრაფია','География',2],['sp','სპორტი','Спорт',1],['sa','საქ. ისტორია','История Грузии',3],['wh','მსოფ. ისტორია','Всемирная история',2],['ar','პრქ. ხელოვნება','Искусство (проект)',1],['ph','ფიზიკა','Физика',3],['ch','ქიმია','Химия',3],['ct','ქიმ. ტექნოლოგია','Хим. технология',2],['pc','პრქ. მოქალაქეობა','Гражданство (проект)',2],['ci','მოქალაქეობა','Гражданство',2],['bi','ბიოლოგია','Биология',3]];
+const TT={1:['ci','ma','sp','ge','wh','ka','ru'],2:['ka','ct','ge','en','ma','pc','bi'],3:['ph','ch','ma','ka','wh','ci','ru'],4:['sa','ka','en','bi','ma','ar'],5:['ph','ch','ct','sp','ka','ma','sa']};
+const HOL={'2026-10-14':'Мцхетоба','2026-11-23':'Гиоргоба','2027-01-01':'Новый год','2027-01-02':'Новый год','2027-01-07':'Рождество','2027-01-19':'Крещение','2027-03-03':'День матери','2027-03-08':'8 марта','2027-04-09':'День нац. единства','2027-05-12':'День Андрия','2027-05-17':'День семьи','2027-05-26':'День независимости'};
+const VAC=[['2026-12-30','2027-01-14','Зимние каникулы','g'],['2027-03-08','2027-03-14','Весенние каникулы','y'],['2027-04-30','2027-05-03','Пасхальные каникулы','y']];
+const START='2026-09-15',END='2027-06-15',DN=['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const MN=['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const nm={},rn={};SUBJ.forEach(s=>{nm[s[0]]=s[1];rn[s[0]]=s[2]});
+const pad=n=>String(n).padStart(2,'0'),$=s=>document.querySelector(s),fmt=d=>d.slice(8)+'.'+d.slice(5,7);
+const loc=t=>t.getFullYear()+'-'+pad(t.getMonth()+1)+'-'+pad(t.getDate());
+const add=(d,n)=>{const t=new Date(d+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)};
+const dowOf=d=>new Date(d+'T00:00:00Z').getUTCDay(),TODAY=loc(new Date());
+function off(d,w){if(d<START||d>END)return['Вне учебного года (старт 15.09, конец 15.06)','g'];if(w==0||w==6)return['Выходной','w'];if(HOL[d])return[HOL[d]+' (праздник)','h'];for(const v of VAC)if(d>=v[0]&&d<=v[1])return[v[2],v[3]];return null}
+const AD={},days=[];
+for(let d='2026-09-01';d<='2027-06-30';d=add(d,1)){const w=dowOf(d),o=off(d,w),x={d,dow:w,o,l:o?[]:TT[w],w:add(d,-((w+6)%7))};AD[d]=x;if(!o)days.push(x)}
+let st={R:3,minGo:3,lim:30,imp:{},att:{}};
+try{Object.assign(st,JSON.parse(localStorage.getItem('sp2627')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('sp2627',JSON.stringify(st))}catch(e){}};
+let N,L,used,val,PW,PL,planCnt;
+const sc=x=>x.l.reduce((a,i)=>a+val[i],0);
+const missed=x=>{const a=st.att[x.d];return a==='a'?x.l:Array.isArray(a)?x.l.filter((_,i)=>a.includes(i)):[]};
+function calc(){
+ N={};L={};used={};val={};PW={};planCnt={};SUBJ.forEach(s=>{N[s[0]]=0;used[s[0]]=0;planCnt[s[0]]=0});
+ for(let k=1;k<=5;k++)TT[k].forEach(i=>PW[i]=(PW[i]||0)+1);
+ days.forEach(x=>x.l.forEach(i=>N[i]++));
+ // ценность урока = важность × редкость (реже урок → ценнее)
+ SUBJ.forEach(s=>{const i=s[0];L[i]=Math.floor(N[i]*st.lim/100+1e-9);val[i]=(st.imp[i]??s[3])*5/PW[i]});
+ days.forEach(x=>missed(x).forEach(i=>used[i]++));
+ // бюджет пропусков на предмет = лимит − уже пропущено − золотой запас
+ const B={};SUBJ.forEach(s=>B[s[0]]=L[s[0]]-used[s[0]]-st.R);
+ const wk={};days.forEach(x=>{const o=wk[x.w]=wk[x.w]||{all:[],c:[],sk:0};o.all.push(x);if(st.att[x.d]==='a')o.sk++;if(x.d>=TODAY&&st.att[x.d]===undefined)o.c.push(x)});
+ const P=new Set();let prog=true,r=0;
+ while(prog&&r<5){prog=false;
+  const ord=Object.keys(wk).filter(w=>wk[w].c.length).sort().map((w,i)=>[w,(i*.618034+r*.37)%1]).sort((a,b)=>a[1]-b[1]);
+  for(const[w]of ord){const o=wk[w];if(o.sk>=Math.max(0,o.all.length-st.minGo))continue;let b=null;
+   for(const x of o.c){if(P.has(x.d)||x.l.some(i=>B[i]<1))continue;if(!b||sc(x)<sc(b))b=x}
+   if(b){P.add(b.d);b.l.forEach(i=>{B[i]--;planCnt[i]++});o.sk++;prog=true}}
+  r++}
+ // золотой запас: сколько ещё полных дней можно пропустить сверх плана (при реальных лимитах)
+ const C={};SUBJ.forEach(s=>C[s[0]]=L[s[0]]-used[s[0]]-planCnt[s[0]]);let extra=0;
+ days.filter(x=>x.d>=TODAY&&st.att[x.d]===undefined&&!P.has(x.d)).sort((a,b)=>sc(a)-sc(b)).forEach(x=>{if(x.l.every(i=>C[i]>=1)){x.l.forEach(i=>C[i]--);extra++}});
+ PL={P,extra};
+}
+function cls(x){const a=st.att[x.d];if(a==='a')return'abs';if(Array.isArray(a))return'part';if(a==='p')return x.d<=TODAY?'pres':'pin';if(x.d<TODAY)return'pres0';return PL.P.has(x.d)?'skip':'go'}
+function v0(){
+ const past=days.filter(x=>x.d<TODAY).length,t=AD[TODAY];let h;
+ if(t&&!t.o){const a=st.att[TODAY];let s,c='g';
+  if(a==='a'){s='Сегодня: не был(а)';c='r'}else if(Array.isArray(a)){s='Сегодня: пропущены отдельные уроки';c='o'}else if(a==='p')s='Сегодня: иду (зафиксировано)';else if(PL.P.has(TODAY)){s='Сегодня можно пропустить';c='o'}else s='Сегодня лучше идти';
+  h=`<div class="card hero ${c}" onclick="openDay('${TODAY}')"><b>${s}</b><div class="m sm">${DN[t.dow]} ${fmt(TODAY)} · ценность дня ${sc(t).toFixed(0)} · ${t.l.map(i=>nm[i]).join(', ')}</div></div>`}
+ else h=`<div class="card hero"><b>Сегодня уроков нет</b><div class="m sm">${t&&t.o?t.o[0]:'вне календаря'}</div></div>`;
+ const W=[];SUBJ.forEach(s=>{const i=s[0],rem=L[i]-used[i];
+  if(rem<0)W.push(`<div class="w r">ЭКСТЕРН: ${s[1]} — пропущено ${used[i]} из ${L[i]} допустимых (превышение ${-rem})</div>`);
+  else if(rem==0)W.push(`<div class="w r">${s[1]}: лимит исчерпан — этот предмет пропускать нельзя</div>`);
+  else if(rem<=2)W.push(`<div class="w">${s[1]}: осталось ${rem} пропуск${rem==1?'':'а'} до экстерна</div>`)});
+ const pc=[0,0,0,0,0,0,0];PL.P.forEach(d=>pc[AD[d].dow]++);
+ const pat=[1,2,3,4,5].map(i=>`${DN[i]} ×${pc[i]}`).join(' · ');
+ const full=days.filter(x=>st.att[x.d]==='a').length;
+ const tm=add(TODAY,-((dowOf(TODAY)+6)%7)),mons=[...new Set(days.filter(x=>x.w>=tm).map(x=>x.w))];
+ const wl=mons.map(w=>{let k=0,g=0;const ch=[1,2,3,4,5].map(i=>{const d=add(w,i-1),x=AD[d];
+  if(!x||x.o)return`<span class="ch off" title="${x&&x.o?x.o[0]:''}">${DN[i]}</span>`;k++;const c=cls(x);if(c!='abs'&&c!='skip')g++;
+  return`<span class="ch ${c}${d==TODAY?' td':''}" onclick="openDay('${d}')">${DN[i]} ${d.slice(8)}</span>`}).join('');
+  return`<div class="wk"><span class="m">${fmt(w)}</span>${ch}<span class="m">${g}/${k}</span></div>`}).join('');
+ return h+W.join('')+`<div class="card"><div class="row"><b>Золотой запас: ещё ${PL.extra} ${PL.extra%10==1&&PL.extra!=11?'день':'дн.'}</b></div><div class="m sm">Столько полных дней можно пропустить сверх плана без экстерна. План сам держит в запасе ${st.R} пропуска по каждому предмету.</div></div>
+ <div class="card"><div class="m sm">Учебных дней: ${days.length}${days.length!=169?' (в календаре должно быть 169!)':''} · прошло ${past} · осталось ${days.length-past}<br>Полных пропусков отмечено: ${full} · запланировано: ${PL.P.size}<br>Ритм пропусков по плану: ${pat}</div></div>
+ <div class="card"><h3>План по неделям</h3><div class="lg"><span class="pres">был / иду</span><span class="skip">план: пропуск</span><span class="abs">не был</span><span class="part">часть уроков</span><span class="go">иду по плану</span></div><div class="m sm">Нажмите на день, чтобы отметить посещение — план перестроится сам. Число справа: дней в школе / учебных дней.</div>${wl}</div>`}
+function v1(){let o=`<div class="lg"><span class="oh">праздник</span><span class="oy">весенние/пасхальные</span><span class="og">зимние/летние/до 15.09</span><span class="pres">был</span><span class="skip">план: пропуск</span><span class="abs">не был</span></div><div class="m sm" style="margin-bottom:8px">Цветные дни без уроков не учитываются в расчёте. Нажмите на учебный день, чтобы изменить отметку (в том числе в прошлом).</div>`;
+ for(let m=8;m<18;m++){const y=2026+(m>11?1:0),mm=m%12,f=(new Date(Date.UTC(y,mm,1)).getUTCDay()+6)%7,n=new Date(Date.UTC(y,mm+1,0)).getUTCDate();let c=0,g='';
+  for(let i=0;i<f;i++)g+='<div class="cd e"></div>';
+  for(let i=1;i<=n;i++){const d=`${y}-${pad(mm+1)}-${pad(i)}`,x=AD[d],td=d==TODAY?' td':'';
+   if(x.o)g+=`<div class="cd o${x.o[1]}${td}" onclick="warn('${d}')" title="${x.o[0]}">${i}</div>`;else{c++;g+=`<div class="cd ${cls(x)}${td}" onclick="openDay('${d}')">${i}</div>`}}
+  o+=`<div class="card"><div class="row"><b>${MN[mm]} ${y}</b><span class="m sm">учебных дней: ${c}</span></div><div class="mo">${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(a=>`<div class="hd">${a}</div>`).join('')}${g}</div></div>`}
+ return o}
+function v2(){return SUBJ.map(s=>{const i=s[0],u=used[i],l=L[i],pl=planCnt[i],rem=l-u,p=l?Math.min(100,u/l*100):100,c=rem<0?'r':rem<=2?'o':'g';
+ return`<div class="card"><div class="row"><b>${s[1]}</b><span class="m sm">${s[2]}</span><span class="tag ${c}">${rem<0?'ЭКСТЕРН':'ост. '+rem}</span></div><div class="bar"><i class="${c}" style="width:${p}%"></i></div><div class="m sm">Пропущено ${u} из ${l} допустимых · всего уроков за год ${N[i]} (${PW[i]}/нед) · по плану +${pl} → ${u+pl}<br>Ценность урока: ${val[i].toFixed(1)}</div><label class="sm">Важность (0–10): <input type="number" min="0" max="10" step=".5" value="${st.imp[i]??s[3]}" onchange="imp('${i}',this.value)"></label></div>`}).join('')}
+function v3(){return`<div class="card"><h3>Параметры</h3>
+<p><label>Лимит пропусков, % от всех уроков предмета: <input type="number" min="1" max="100" value="${st.lim}" onchange="cfg('lim',this.value)"></label></p>
+<p><label>Золотой запас, пропусков на предмет: <input type="number" min="0" max="15" value="${st.R}" onchange="cfg('R',this.value)"></label></p>
+<p><label>Минимум дней в школе за неделю: <input type="number" min="0" max="5" value="${st.minGo}" onchange="cfg('minGo',this.value)"></label></p></div>
+<div class="card bt"><h3>Данные</h3><div class="m sm">Всё хранится в браузере на этом устройстве.</div><button onclick="exp()">Скопировать данные</button><button onclick="imp2()">Вставить данные</button><button onclick="if(confirm('Стереть все отметки?')){st.att={};save();render()}">Сбросить отметки</button></div>
+<div class="card sm m"><b>Как считает модель.</b> Каждый урок имеет ценность = важность × редкость (5 ÷ уроков в неделю). Ценность дня — сумма ценностей его уроков: дни с редкими уроками дороже, дни с ежедневными дешевле. Лимит предмета = ${st.lim}% от всех его уроков за год. План выбирает дни пропуска с минимальной ценностью, равномерно по неделям, не трогая золотой запас, и пересобирается после каждой отметки.</div>`}
+function render(){calc();$('#v0').innerHTML=v0();$('#v1').innerHTML=v1();$('#v2').innerHTML=v2();$('#v3').innerHTML=v3()}
+function tab(n){document.querySelectorAll('.v').forEach((e,i)=>e.classList.toggle('on',i==n));document.querySelectorAll('nav button').forEach((e,i)=>e.classList.toggle('on',i==n));scrollTo(0,0)}
+function warn(d){const x=AD[d],t=$('#ts');t.textContent=`${fmt(d)}: уроков нет — ${x.o[0]}. День не учитывается в расчёте.`;t.style.display='block';clearTimeout(warn.t);warn.t=setTimeout(()=>t.style.display='none',3800)}
+function openDay(d){const x=AD[d],a=st.att[d],f=d>TODAY;
+ $('#md').innerHTML=`<div class="box"><h3>${DN[x.dow]} ${fmt(d)}</h3><div class="m sm">${f?'Будущий день: можно зафиксировать вручную, план подстроится.':'Отметьте, как было.'}</div><p><button onclick="sa('${d}','p')">${f?'Пойду':'Был(а)'}</button><button onclick="sa('${d}','a')">${f?'Пропущу':'Не был(а)'}</button><button onclick="sa('${d}')">Авто</button></p><div class="sm m">Или отметьте пропущенные уроки:</div>${x.l.map((i,k)=>`<label><input type="checkbox" value="${k}" ${Array.isArray(a)&&a.includes(k)?'checked':''}> ${k+1}. ${nm[i]}</label>`).join('')}<p><button onclick="sl('${d}')">Применить по урокам</button><button onclick="cl()">Закрыть</button></p></div>`;$('#md').classList.add('on')}
+const cl=()=>$('#md').classList.remove('on');
+function sa(d,v){if(v===undefined)delete st.att[d];else st.att[d]=v;save();cl();render()}
+function sl(d){const k=[...document.querySelectorAll('#md input:checked')].map(e=>+e.value);if(!k.length)delete st.att[d];else st.att[d]=k.length==AD[d].l.length?'a':k;save();cl();render()}
+const imp=(i,v)=>{st.imp[i]=+v;save();render()},cfg=(k,v)=>{st[k]=Math.max(0,+v||0);save();render()};
+function exp(){const s=JSON.stringify(st);(navigator.clipboard?navigator.clipboard.writeText(s):Promise.reject()).then(()=>alert('Скопировано'),()=>prompt('Скопируйте:',s))}
+function imp2(){const s=prompt('Вставьте данные:');if(!s)return;try{st=Object.assign({R:3,minGo:3,lim:30,imp:{},att:{}},JSON.parse(s));save();render()}catch(e){alert('Не удалось прочитать данные')}}
+render();tab(0);
+</script></body></html>
